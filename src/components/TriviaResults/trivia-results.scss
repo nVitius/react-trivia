@@ -1,0 +1,60 @@
+@import '../../assets/globals';
+
+.trivia-results {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+
+  .header {
+    margin-bottom: 1.5rem;
+
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .result-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+
+    word-break: break-word;
+  }
+
+  .no-scrollbar {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .result {
+    display: flex;
+
+    padding: .5rem;
+    margin: .5rem 0;
+
+    border: 4px solid;
+    border-radius: 20px;
+
+    &.correct {
+      border-color: $success-color;
+    }
+
+    &.incorrect {
+      border-color: $error-color;
+    }
+
+    .question {
+
+    }
+  }
+
+  a {
+    display: flex;
+    justify-content: center;
+
+    margin-top: auto;
+  }
+
+  button {
+    width: 100%;
+  }
+}

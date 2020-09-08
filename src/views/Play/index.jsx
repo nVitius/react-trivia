@@ -7,6 +7,7 @@ import './play.scss'
 
 import ActionLink from '../../components/ActionLink'
 import TriviaQuestion from '../../components/TriviaQuestion';
+import TriviaResults from '../../components/TriviaResults';
 
 export default class Play extends React.Component {
   constructor(props) {
@@ -39,7 +40,7 @@ export default class Play extends React.Component {
   }
 
   render() {
-    return<div id="play">
+    return<div id="play" className={ this.props.mobile ? 'mobile' : '' }>
       <ActionLink to="/" replace={true} action={this.exit}>
         <span className="exit"><i className="fa fa-arrow-left"/></span>
       </ActionLink>
@@ -54,16 +55,31 @@ export default class Play extends React.Component {
             /* if quiz is loaded: show quiz, else show loader */
             /* if quiz is loaded and `currentQuestion` is past the last question: show results page */
             _.has(this.state, 'quiz') && this.state.quiz.length > 0
-              ? <TriviaQuestion
-                  question={{
-                    index: this.state.currentQuestion,
-                    text: this.state.quiz[this.state.currentQuestion]['question'],
-                    answer: this.state.quiz[this.state.currentQuestion]['correct_answer'] === 'True'
-                  }}
-                  count={this.props.count}
-                  onNext={x => this.next(x)}
-                  key={`question_${this.state.currentQuestion}`}
-                />
+              ? <SwitchTransition mode="out-in">
+                  <CSSTransition
+                    key={this.state.currentQuestion < this.state.quiz.length ? 'question' : 'results'}
+                    classNames="fade"
+                    addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
+                    timeout={300}
+                  >{
+                    this.state.currentQuestion < this.state.quiz.length
+                      ? <TriviaQuestion
+                          question={{
+                            index: this.state.currentQuestion,
+                            text: this.state.quiz[this.state.currentQuestion]['question'],
+                            answer: this.state.quiz[this.state.currentQuestion]['correct_answer'] === 'True'
+                          }}
+                          count={this.props.count}
+                          onNext={x => this.next(x)}
+                          key={`question_${this.state.currentQuestion}`}
+                        />
+                      : <TriviaResults
+                          results={this.state.results}
+                          onClick={() => this.exit()}
+                        />
+                  }
+                  </CSSTransition>
+                </SwitchTransition>
               : <span className="loader"><i className="fa fa-spinner fa-spin"/></span>
           }
           </CSSTransition>
