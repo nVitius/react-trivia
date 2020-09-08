@@ -2,12 +2,11 @@ import React from 'react'
 import {CSSTransition, SwitchTransition} from 'react-transition-group'
 
 import _ from 'lodash'
-import { AllHtmlEntities } from 'html-entities'
 
 import './play.scss'
-import ActionLink from "../../components/ActionLink"
 
-const entities = new AllHtmlEntities()
+import ActionLink from '../../components/ActionLink'
+import TriviaQuestion from '../../components/TriviaQuestion';
 
 export default class Play extends React.Component {
   constructor(props) {
@@ -15,6 +14,7 @@ export default class Play extends React.Component {
 
     this.state = {
       currentQuestion: 0,
+      results: [],
       selected: null,
       deselected: null,
       checked: null,
@@ -51,70 +51,20 @@ export default class Play extends React.Component {
             addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
             timeout={300}
           >{
+            /* if quiz is loaded: show quiz, else show loader */
+            /* if quiz is loaded and `currentQuestion` is past the last question: show results page */
             _.has(this.state, 'quiz') && this.state.quiz.length > 0
-            ? <div className="content">
-              <div className="header">Question {this.state.currentQuestion + 1}<span>/{this.props.count}</span></div>
-              <div className="question">{
-                entities.decode(this.state.quiz[this.state.currentQuestion].question)
-              }
-              </div>
-              <div className="answers">
-                <div
-                  className={
-                    ([
-                      'answer',
-                      this.state.selected === true ? 'selected' : '',
-                      this.state.deselected === true ? 'deselected' : '',
-                      this.state.selected === true && this.state.checked === true
-                        ? this.state.correct === true
-                        ? 'correct' : 'incorrect'
-                        : ''
-                    ]).join(' ')
-                  }
-                  onClick={() => this.select(true)}
-                >
-                  <span className="answer-text">TRUE</span>
-                  <span className="answer-icon"><i className="fa fa-check"/></span>
-                </div>
-                <div
-                  className={
-                    ([
-                      'answer',
-                      this.state.selected === false ? 'selected' : '',
-                      this.state.deselected === false ? 'deselected' : '',
-                      this.state.selected === false && this.state.checked === true
-                        ? this.state.correct === true
-                        ? 'correct' : 'incorrect'
-                        : ''
-                    ]).join(' ')
-                  }
-                  onClick={() => this.select(false)}
-                >
-                  <span className="answer-text">FALSE</span>
-                  <span className="answer-icon"><i className="fa fa-check"/></span>
-                </div>
-              </div>
-
-              <div className="next">
-                <button
-                  className={(['small', this.state.selected === null ? 'disabled' : '']).join(' ')}
-                  onClick={() => this.checkOrNext()}
-                >
-                  <SwitchTransition mode="out-in">
-                    <CSSTransition
-                      key={this.state.checked ? 'next' : 'check'}
-                      classNames="fade"
-                      addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
-                      timeout={300}
-                    >
-                      <span>{this.state.checked ? 'NEXT' : 'CHECK'}</span>
-                    </CSSTransition>
-
-                  </SwitchTransition>
-                </button>
-              </div>
-            </div>
-            : <span className="loader"><i className="fa fa-spinner fa-spin"/></span>
+              ? <TriviaQuestion
+                  question={{
+                    index: this.state.currentQuestion,
+                    text: this.state.quiz[this.state.currentQuestion]['question'],
+                    answer: this.state.quiz[this.state.currentQuestion]['correct_answer'] === 'True'
+                  }}
+                  count={this.props.count}
+                  onNext={x => this.next(x)}
+                  key={`question_${this.state.currentQuestion}`}
+                />
+              : <span className="loader"><i className="fa fa-spinner fa-spin"/></span>
           }
           </CSSTransition>
         </SwitchTransition>
@@ -122,35 +72,18 @@ export default class Play extends React.Component {
     </div>
   }
 
-  select(answer) {
-    if (this.state.checked)
-      return
-
+  next(isCorrect) {
     this.setState({
-      selected: this.state.selected === answer ? null : answer,
-      deselected: this.state.selected === null ? null : this.state.selected
+      results: [
+        ...this.state.results,
+        {
+          index: this.state.currentQuestion,
+          question: this.state.quiz[this.state.currentQuestion],
+          isCorrect
+        }
+      ],
+      currentQuestion: this.state.currentQuestion + 1
     })
-  }
-
-  checkOrNext() {
-    if (this.state.selected === null)
-      return
-
-    const answerAsBool = this.state.quiz[this.state.currentQuestion]['correct_answer'] === 'True'
-    if (this.state.checked !== true)
-      this.setState({
-        checked: true,
-        correct: answerAsBool === this.state.selected
-      })
-    else if (this.state.currentQuestion < this.props.count - 1)
-      this.setState({
-        checked: false,
-        correct: null,
-        currentQuestion: this.state.currentQuestion + 1,
-        selected: null
-      })
-    else
-      return // navigate to results
   }
 
   exit() {
