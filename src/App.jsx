@@ -7,7 +7,7 @@ import {
 import mqDecorate from 'mq-react'
 
 import './app.scss'
-import Home from './views/home'
+import Home from './views/Home'
 import Play from './views/Play'
 
 const routes = [
