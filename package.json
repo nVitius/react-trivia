@@ -1,6 +1,9 @@
 {
   "name": "react-trivia",
   "version": "1.0.0",
+  "scripts": {
+    "start": "parcel ./index.html"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
     "lodash": "^4.17.20",
