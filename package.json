@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "html-entities": "^1.3.1",
     "lodash": "^4.17.20",
     "mq-react": "^1.0.5",
     "prop-types": "^15.7.2",

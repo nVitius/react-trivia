@@ -2,15 +2,19 @@ import React from 'react'
 import {CSSTransition, SwitchTransition} from 'react-transition-group'
 
 import _ from 'lodash'
+import { AllHtmlEntities } from 'html-entities'
 
 import './play.scss'
 import ActionLink from "../../components/ActionLink"
+
+const entities = new AllHtmlEntities()
 
 export default class Play extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      currentQuestion: 0,
       selected: null,
       deselected: null,
       checked: null,
@@ -49,8 +53,11 @@ export default class Play extends React.Component {
           >{
             _.has(this.state, 'quiz') && this.state.quiz.length > 0
             ? <div className="content">
-              <div className="header">Question 1<span>/{this.props.count}</span></div>
-              <div className="question">This is a test question can you answer it correctly?</div>
+              <div className="header">Question {this.state.currentQuestion + 1}<span>/{this.props.count}</span></div>
+              <div className="question">{
+                entities.decode(this.state.quiz[this.state.currentQuestion].question)
+              }
+              </div>
               <div className="answers">
                 <div
                   className={
@@ -129,13 +136,21 @@ export default class Play extends React.Component {
     if (this.state.selected === null)
       return
 
+    const answerAsBool = this.state.quiz[this.state.currentQuestion]['correct_answer'] === 'True'
     if (this.state.checked !== true)
       this.setState({
         checked: true,
-        correct: false
+        correct: answerAsBool === this.state.selected
+      })
+    else if (this.state.currentQuestion < this.props.count - 1)
+      this.setState({
+        checked: false,
+        correct: null,
+        currentQuestion: this.state.currentQuestion + 1,
+        selected: null
       })
     else
-      this.setState({checked: false, correct: false})
+      return // navigate to results
   }
 
   exit() {
