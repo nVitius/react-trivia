@@ -1,0 +1,29 @@
+/*********************************
+*******      COLORS      *********
+*********************************/
+
+$background-color: linear-gradient(-45deg, #e73c7e, #23a6d5);
+
+$background-color-1: #e73c7e;
+$background-color-2: #23a6d5;
+
+$button-color: #23a6d5;
+
+$accent-color: #3b3561;
+
+$success-color: #06d6a0;
+$error-color: #ef476f;
+
+
+/*********************************
+*******      EASINGS     *********
+*********************************/
+
+/* https://easings.net/#easeInQuart */
+$ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
+
+/* https://easings.net/#easeOutQuart */
+$ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+/* https://easings.net/#easeInOutQuart */
+$ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);

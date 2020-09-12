@@ -1,4 +1,5 @@
 @import './assets/globals';
+@import './assets/reset';
 
 * {
   box-sizing: border-box;
@@ -28,4 +29,26 @@ body {
   width: 100%;
 
   padding: 10% 5%;
+}
+
+button {
+  padding: 1em;
+  border-radius: 2em;
+  min-width: 200px;
+
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: white;
+  background-color: $button-color;
+
+  cursor: pointer;
+
+  transition: transform ease-in 0.1s, box-shadow ease-in 0.25s, opacity ease-in 0.25s;
+  box-shadow: 0 2px 25px rgba(35, 166, 213, 0.5);
+
+  &:active:not(.disabled) {
+    transform: scale(0.9);
+    background-color: darken($button-color, 5%);
+    box-shadow: 0 2px 25px rgba(35, 166, 213, 0.2);
+  }
 }

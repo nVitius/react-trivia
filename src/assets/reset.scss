@@ -1,0 +1,37 @@
+/*
+  Reset input styles for easier customization
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button {
+  -webkit-appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+
+  &:focus {
+    border: 0;
+    outline: none;
+  }
+}
+
