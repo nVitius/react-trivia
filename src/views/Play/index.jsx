@@ -1,6 +1,7 @@
 import React from 'react'
 
 import './play.scss'
+import ActionLink from "../../components/ActionLink"
 
 export default class Play extends React.Component {
   constructor(props) {
@@ -30,6 +31,9 @@ export default class Play extends React.Component {
 
   render() {
     return<div id="play">
+      <ActionLink to="/" replace={true} action={this.exit}>
+        <span className="exit"><i className="fa fa-arrow-left"/></span>
+      </ActionLink>
       <div className="card">
         <div className="content">
           <div className="header">Question 1<span>/{this.props.count}</span></div>
@@ -79,6 +83,19 @@ export default class Play extends React.Component {
     this.setState({
       selected: this.state.selected === answer ? null : answer,
       deselected: this.state.selected === null ? null : this.state.selected
+    })
+  }
+
+  exit() {
+    return new Promise(resolve => {
+      document.body.classList.contains('animate')
+        ? document.body.classList.remove('animate')
+        : document.body.classList.add('animate')
+
+      document.getElementById('play').classList.add('fade')
+
+      setTimeout(() => resolve(), 500) // Wait for document.body animation to finish
+
     })
   }
 }
