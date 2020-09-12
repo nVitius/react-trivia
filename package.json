@@ -1,0 +1,14 @@
+{
+  "name": "react-trivia",
+  "version": "1.0.0",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.10"
+  }
+}
