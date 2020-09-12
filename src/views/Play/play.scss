@@ -113,6 +113,55 @@
           opacity: 0;
         }
       }
+
+      /*
+       * Animations and styles for checking and unchecking answers
+       */
+      &.selected .answer-icon {
+        animation: icon-toggle-on 800ms $ease-out-quart both;
+        i {
+          animation: check-show 0ms linear both 200ms;
+        }
+      }
+
+      &.deselected .answer-icon {
+        animation: icon-toggle-off 500ms $ease-in-out-quart both;
+        i {
+          animation: check-hide 500ms $ease-in-out-quart both;
+        }
+      }
+
+      @keyframes icon-toggle-off {
+        0% {
+          background-color: $button-color;
+          border-color: $button-color;
+        }
+
+        50% { background-color: transparent }
+      }
+
+      @keyframes check-hide {
+        0% { opacity: 1 }
+
+        50% { opacity: 0 }
+      }
+
+      @keyframes icon-toggle-on {
+        0% { transform: scale(1) }
+        50% { transform: scale(0) }
+        100% {
+          transform: scale(1);
+          background-color: $button-color;
+          border-color: $button-color;
+
+        }
+      }
+
+      @keyframes check-show {
+        100% { opacity: 1 }
+      }
+
+
     }
   }
 }
