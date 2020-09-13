@@ -45,6 +45,14 @@
     background: $accent-color;
   }
 
+  .loader {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 3rem;
+  }
+
   .content {
     display: flex;
     flex-direction: column;
@@ -163,5 +171,37 @@
 
 
     }
+  }
+
+  .next {
+    display: flex;
+    justify-content: center;
+
+    padding-top: 2rem;
+
+  }
+
+  /*
+   * Fade animations for use with CSSTransition and SwitchTransition
+   */
+  .fade-enter{
+    opacity: 0;
+  }
+  .fade-exit{
+    opacity: 1;
+  }
+  .fade-enter-active{
+    opacity: 1;
+  }
+  .fade-exit-active{
+    opacity: 0;
+  }
+
+  .fade-enter-active {
+    transition: opacity 300ms $ease-in-quart;
+  }
+
+  .fade-exit-active{
+    transition: opacity 300ms $ease-out-quart;
   }
 }

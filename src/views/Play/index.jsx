@@ -1,4 +1,5 @@
 import React from 'react'
+import {CSSTransition, SwitchTransition} from 'react-transition-group'
 
 import './play.scss'
 import ActionLink from "../../components/ActionLink"
@@ -9,7 +10,9 @@ export default class Play extends React.Component {
 
     this.state = {
       selected: null,
-      deselected: null
+      deselected: null,
+      checked: null,
+      correct: null
     }
   }
 
@@ -74,16 +77,51 @@ export default class Play extends React.Component {
               <span className="answer-icon"><i className="fa fa-check"/></span>
             </div>
           </div>
+
+          <div className="next">
+            <button
+              className={(['small', this.state.selected === null ? 'disabled' : '']).join(' ')}
+              onClick={() => this.checkOrNext()}
+            >
+              <SwitchTransition mode="out-in">
+                <CSSTransition
+                  key={this.state.checked ? 'next' : 'check'}
+                  classNames="fade"
+                  addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
+                  timeout={300}
+                >
+                  <span>{this.state.checked ? 'NEXT' : 'CHECK'}</span>
+                </CSSTransition>
+
+              </SwitchTransition>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   }
 
   select(answer) {
+    if (this.state.checked)
+      return
+
     this.setState({
       selected: this.state.selected === answer ? null : answer,
       deselected: this.state.selected === null ? null : this.state.selected
     })
+  }
+
+  checkOrNext() {
+    if (this.state.selected === null)
+      return
+
+    if (this.state.checked !== true)
+      this.setState({
+        checked: true,
+        correct: false
+      })
+    else
+      this.setState({checked: false, correct: false})
   }
 
   exit() {

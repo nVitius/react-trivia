@@ -51,4 +51,17 @@ button {
     background-color: darken($button-color, 5%);
     box-shadow: 0 2px 25px rgba(35, 166, 213, 0.2);
   }
+
+  &.small {
+    font-size: 1.2rem;
+    min-width: 160px;
+  }
+
+  &.disabled {
+    opacity: 0.2;
+
+    box-shadow: unset;
+
+    cursor: unset;
+  }
 }
