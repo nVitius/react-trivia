@@ -1,6 +1,8 @@
 import React from 'react'
 import {CSSTransition, SwitchTransition} from 'react-transition-group'
 
+import _ from 'lodash'
+
 import './play.scss'
 import ActionLink from "../../components/ActionLink"
 
@@ -38,65 +40,77 @@ export default class Play extends React.Component {
         <span className="exit"><i className="fa fa-arrow-left"/></span>
       </ActionLink>
       <div className="card">
-        <div className="content">
-          <div className="header">Question 1<span>/{this.props.count}</span></div>
-          <div className="question">This is a test question can you answer it correctly?</div>
-          <div className="answers">
-            <div
-              className={
-                ([
-                  'answer',
-                  this.state.selected === true ? 'selected' : '',
-                  this.state.deselected === true ? 'deselected' : '',
-                  this.state.selected === true && this.state.checked === true
-                    ? this.state.correct === true
-                    ? 'correct' : 'incorrect'
-                    : ''
-                ]).join(' ')
-              }
-              onClick={() => this.select(true)}
-            >
-              <span className="answer-text">TRUE</span>
-              <span className="answer-icon"><i className="fa fa-check"/></span>
-            </div>
-            <div
-              className={
-                ([
-                  'answer',
-                  this.state.selected === false ? 'selected' : '',
-                  this.state.deselected === false ? 'deselected' : '',
-                  this.state.selected === false && this.state.checked === true
-                    ? this.state.correct === true
-                    ? 'correct' : 'incorrect'
-                    : ''
-                ]).join(' ')
-              }
-              onClick={() => this.select(false)}
-            >
-              <span className="answer-text">FALSE</span>
-              <span className="answer-icon"><i className="fa fa-check"/></span>
-            </div>
-          </div>
-
-          <div className="next">
-            <button
-              className={(['small', this.state.selected === null ? 'disabled' : '']).join(' ')}
-              onClick={() => this.checkOrNext()}
-            >
-              <SwitchTransition mode="out-in">
-                <CSSTransition
-                  key={this.state.checked ? 'next' : 'check'}
-                  classNames="fade"
-                  addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
-                  timeout={300}
+        <SwitchTransition mode="out-in">
+          <CSSTransition
+            key={_.has(this.state, 'quiz') && this.state.quiz.length > 0 ? 'card' : 'loader'}
+            classNames="fade"
+            addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
+            timeout={300}
+          >{
+            _.has(this.state, 'quiz') && this.state.quiz.length > 0
+            ? <div className="content">
+              <div className="header">Question 1<span>/{this.props.count}</span></div>
+              <div className="question">This is a test question can you answer it correctly?</div>
+              <div className="answers">
+                <div
+                  className={
+                    ([
+                      'answer',
+                      this.state.selected === true ? 'selected' : '',
+                      this.state.deselected === true ? 'deselected' : '',
+                      this.state.selected === true && this.state.checked === true
+                        ? this.state.correct === true
+                        ? 'correct' : 'incorrect'
+                        : ''
+                    ]).join(' ')
+                  }
+                  onClick={() => this.select(true)}
                 >
-                  <span>{this.state.checked ? 'NEXT' : 'CHECK'}</span>
-                </CSSTransition>
+                  <span className="answer-text">TRUE</span>
+                  <span className="answer-icon"><i className="fa fa-check"/></span>
+                </div>
+                <div
+                  className={
+                    ([
+                      'answer',
+                      this.state.selected === false ? 'selected' : '',
+                      this.state.deselected === false ? 'deselected' : '',
+                      this.state.selected === false && this.state.checked === true
+                        ? this.state.correct === true
+                        ? 'correct' : 'incorrect'
+                        : ''
+                    ]).join(' ')
+                  }
+                  onClick={() => this.select(false)}
+                >
+                  <span className="answer-text">FALSE</span>
+                  <span className="answer-icon"><i className="fa fa-check"/></span>
+                </div>
+              </div>
 
-              </SwitchTransition>
-            </button>
-          </div>
-        </div>
+              <div className="next">
+                <button
+                  className={(['small', this.state.selected === null ? 'disabled' : '']).join(' ')}
+                  onClick={() => this.checkOrNext()}
+                >
+                  <SwitchTransition mode="out-in">
+                    <CSSTransition
+                      key={this.state.checked ? 'next' : 'check'}
+                      classNames="fade"
+                      addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
+                      timeout={300}
+                    >
+                      <span>{this.state.checked ? 'NEXT' : 'CHECK'}</span>
+                    </CSSTransition>
+
+                  </SwitchTransition>
+                </button>
+              </div>
+            </div>
+            : <span className="loader"><i className="fa fa-spinner fa-spin"/></span>
+          }
+          </CSSTransition>
+        </SwitchTransition>
       </div>
     </div>
   }
